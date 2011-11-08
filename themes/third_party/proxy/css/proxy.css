@@ -1,0 +1,104 @@
+/*
+* Add field table in CP 
+*
+*/
+#add_field-table table th:nth-child(1), #add_field_table table td:nth-child(1){
+	width:300px;
+}
+#add_field-table table th:nth-child(3), #add_field_table table td:nth-child(3){
+	width:22px;
+} 
+.add_field{
+	background: transparent url(../images/button_plus.png) no-repeat left -20px;
+	display:block;
+	float:right;
+	height:20px;
+	width:20px;
+}
+.add_field.inactive{
+	background: transparent url(../images/button_plus.png) no-repeat left top;
+}
+.hidden_field_data{
+	display:none;
+}
+
+/*
+*  Field table
+*
+*/
+.box{
+	border: 1px solid #D0D7DF;
+	padding: 0 10px;
+}
+
+.remove_field{
+	background: transparent url(../images/button_x.png) no-repeat left -20px;
+	display:block;
+	float:right;
+	height:20px;
+	width:20px;
+}
+.minimize_field{
+	background: transparent url(../images/button_minus.png) no-repeat left -20px;
+	display:block;
+	float:right;
+	height:20px;
+	width:20px;
+}
+
+.mainTable tr th:first-child, .mainTable tr td:first-child{
+	width:50%;
+}
+.mainTable tr th:first-child span, .mainTable tr td:first-child span{
+	font-weight:bold;
+}
+
+select.substitution_type{
+  display:block;
+}
+select.substitution_method{
+  display:block;
+}
+input.option_number{
+  display:none;
+  width:100px;
+}
+
+.toggle_channel{
+  margin-left:10px;
+  text-decoration:none;
+}
+
+.has-layout{
+  overflow:hidden;
+  zoom:1;
+}
+.has-layout-auto{
+  overflow:auto;
+  zoom:1;
+}
+
+/* >> The Magnificent CLEARFIX << */
+.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.clearfix { display: inline-block; }
+* html .clearfix { height: 1%; } /* Hides from IE-mac \*/
+.clearfix { display: block; }
+
+.alignLeft{text-align:left}
+.alignCenter{text-align:center}
+.alignRight{text-align:right}
+
+.left{float:left !important;}
+.none{float:none !important;}
+.right{float:right !important;}
+.clear{clear:both}
+
+.mt0{margin-top:0 !important;}.mt5{margin-top:5px !important;}.mt10{margin-top:10px !important;}.mt15{margin-top:15px !important;}.mt20{margin-top:20px !important;}.mt25{margin-top:25px !important;}.mt30{margin-top:30px !important;}.mt35{margin-top:35px !important;}.mt40{margin-top:40px !important;}.mt50{margin-top:50px !important;}.mt75{margin-top:75px !important;}.mt100{margin-top:100px !important;}.mt150{margin-top:150px !important;}.mt200{margin-top:200px !important;}
+.mr0{margin-right:0 !important;}.mr2{margin-right:2px;}.mr5{margin-right:5px !important;}.mr10{margin-right:10px !important;}.mr15{margin-right:15px !important;}.mr20{margin-right:20px !important;}.mr25{margin-right:25px !important;}.mr30{margin-right:30px !important;}.mr35{margin-right:35px !important;}.mr40{margin-right:40px !important;}.mr50{margin-right:50px !important;}.mr75{margin-right:75px !important;}.mr100{margin-right:100px !important;}
+.mb0{margin-bottom:0 !important;}.mb5{margin-bottom:5px !important;}.mb10{margin-bottom:10px !important;}.mb15{margin-bottom:15px !important;}.mb20{margin-bottom:20px !important;}.mb25{margin-bottom:25px !important;}.mb30{margin-bottom:30px !important;}.mb35{margin-bottom:35px !important;}.mb40{margin-bottom:40px !important;}.mb50{margin-bottom:50px !important;}.mb75{margin-bottom:75px !important;}.mb100{margin-bottom:100px !important;}
+.ml0{margin-left:0 !important;}.ml5{margin-left:5px !important;}.ml10{margin-left:10px !important;}.ml15{margin-left:15px !important;}.ml20{margin-left:20px !important;}.ml25{margin-left:25px !important;}.ml30{margin-left:30px !important;}.ml35{margin-left:35px !important;}.ml40{margin-left:40px !important;}.ml50{margin-left:50px !important;}.ml75{margin-left:75px !important;}.ml100{margin-left:100px !important;}
+
+.pt0{padding-top:0 !important;}.pt5{padding-top:5px !important;}.pt10{padding-top:10px !important;}.pt15{padding-top:15px !important;}.pt20{padding-top:20px !important;}.pt25{padding-top:25px !important;}.pt30{padding-top:30px !important;}.pt35{padding-top:35px !important;}.pt40{padding-top:40px !important;}.pt50{padding-top:50px !important;}.pt75{padding-top:75px !important;}.pt100{padding-top:100px !important;}.pt150{padding-top:150px !important;}.pt200{padding-top:200px !important;}
+.pr0{padding-right:0 !important;}.pr2{padding-right:2px;}.pr5{padding-right:5px !important;}.pr10{padding-right:10px !important;}.pr15{padding-right:15px !important;}.pr20{padding-right:20px !important;}.pr25{padding-right:25px !important;}.pr30{padding-right:30px !important;}.pr35{padding-right:35px !important;}.pr40{padding-right:40px !important;}.pr50{padding-right:50px !important;}.pr75{padding-right:75px !important;}.pr100{padding-right:100px !important;}
+.pb0{padding-bottom:0 !important;}.pb5{padding-bottom:5px !important;}.pb10{padding-bottom:10px !important;}.pb15{padding-bottom:15px !important;}.pb20{padding-bottom:20px !important;}.pb25{padding-bottom:25px !important;}.pb30{padding-bottom:30px !important;}.pb35{padding-bottom:35px !important;}.pb40{padding-bottom:40px !important;}.pb50{padding-bottom:50px !important;}.pb75{padding-bottom:75px !important;}.pb100{padding-bottom:100px !important;}
+.pl0{padding-left:0 !important;}.pl5{padding-left:5px !important;}.pl10{padding-left:10px !important;}.pl15{padding-left:15px !important;}.pl20{padding-left:20px !important;}.pl25{padding-left:25px !important;}.pl30{padding-left:30px !important;}.pl35{padding-left:35px !important;}.pl40{padding-left:40px !important;}.pl50{padding-left:50px !important;}.pl75{padding-left:75px !important;}.pl100{padding-left:100px !important;}
