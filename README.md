@@ -21,7 +21,7 @@ Before Proxy, I was creating a plethora of test entires to test various types of
 - On the field settings field, select the Channel and Channel Field you want to setup a placeholder for, then click the + button.
 - After the new field table has been created, set the preferences for that field:
 
-		- Substitution Type: Lets you decide when to substitue data.
+		- Substitution Type: Lets you decide when to substitue data. (Substitute only when empty does not current work for tagpair substitution)
 		- Substitution Method: How to substitue data; Either randomly, based on the placeholders you provide, or using the Placeholder Index, where you provide the index number of the placeholder which you want to use.
 		- Placeholder(s):  The actual data you want to substitute.  For single tags, you can delimit multiple options using || . For tagpairs with child tags (ie: Matrix tags), use the format N||{field_1::value_1,,field_2::value_2}{field_1::value_3,,field_2::value_4}, where N is the number of times you want the tagpair to loop.
 
@@ -38,3 +38,4 @@ In the previous example, if we have the Substitution Method set to Random, it wi
 There are no module specific template tags at this time.
 
 ## Known Issues
+- Substituion only when empty does not currently work for tagpair data.

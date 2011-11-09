@@ -109,9 +109,9 @@
 					<td>
 						<select name="field_${channel_id}_${field_id}[substitution_method]" class="substitution_method">
 							<option value="random">Random</option>
-							<option value="option">Placeholder Index</option>
+							<option value="placeholder_index">Placeholder Index</option>
 						</select>
-						<input type="text" name="field_${channel_id}_${field_id}[placeholder_index]" value="" placeholder="Option..." class="mt10 option_number">
+						<input type="text" name="field_${channel_id}_${field_id}[placeholder_index]" value="0" class="mt10 option_number">
 					</td>
 				</tr>
 				<tr class="odd">

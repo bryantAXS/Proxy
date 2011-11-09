@@ -58,7 +58,7 @@ Field.prototype.bind_table_events = function(){
 	self.$table.find('.substitution_method').bind('change',function(){
     
 		var $el = $(this);
-    
+
     if($el.val() == 'placeholder_index'){
       $el.next().show();
     }else{

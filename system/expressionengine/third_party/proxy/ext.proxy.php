@@ -212,7 +212,7 @@ class Proxy_ext {
     */
     function channel_entries_tagdata($tagdata, $row, $channel_obj)
     {
-      
+
       $this->EE->load->model('proxy_settings_model', 'proxy_settings');
       $this->EE->load->model('proxy_field_settings_model', 'field_settings');
       $this->settings = $this->EE->proxy_settings->get_proxy_settings();
@@ -231,12 +231,17 @@ class Proxy_ext {
             if($field_settings['channel_id'] == $row['channel_id'])
             {
               
-              //this is where we are looking for the specific tag pair to substitute, if we want to search for conditional tags, we would look here
+              //this is where we are looking for the specific tag pair to substitute
               if(strpos($tagdata, '{'.$field_name) !== FALSE)
               {
                 $field = array("field_name"=>$field_name);
                 $this->field = $field_settings;
-                $tagdata = preg_replace_callback("/\{({$field['field_name']}(\s+.*?)?)\}(.*?)\{\/{$field['field_name']}\}/s", array(&$this, '_parse_tag_pair'), $tagdata);
+
+                //we don't want preg_replace_callback to execute if the field is set to not substitute, because it will remove the tag pair from the tagdata
+                if($this->field['substitution_type'] != "no_substitution")
+                {
+                  $tagdata = preg_replace_callback("/\{({$field['field_name']}(\s+.*?)?)\}(.*?)\{\/{$field['field_name']}\}/s", array(&$this, '_parse_tag_pair'), $tagdata); 
+                }
               }
                       
             }
@@ -292,15 +297,16 @@ class Proxy_ext {
 
         case 'empty':
           
-          $field_name = $row['field_id'] . $field_id;
+          //TODO: this currently does not work -- we need to find a way to check for the row data in this loop.
 
-          if( empty($field_name) ){
+          //$field_name = $row['field_id'] . $field_id;
+          //if( empty($field_name) ){
             if($substitution_method == 'random'){
               $cell_data[] = $this->_get_pair_placeholders($placeholders);
             }else{
               $cell_data[] = $this->_get_pair_placeholders($placeholders, $placeholder_index);
             }
-          }
+          //}
 
         break;
 
