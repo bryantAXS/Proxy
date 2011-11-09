@@ -38,4 +38,4 @@ In the previous example, if we have the Substitution Method set to Random, it wi
 There are no module specific template tags at this time.
 
 ## Known Issues
-- Substituion only when empty does not currently work for tagpair data.
+- Substituion Only Empty/Blank Data does not currently work for tagpair data.
