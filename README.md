@@ -6,7 +6,7 @@ Proxy is an EE2.0 Module used to substitue template tags with placeholder data, 
 
 Before Proxy, I was creating a plethora of test entires to test various types of content that could be used in a Channel Field.  The process of creating all these dummy entries was time consuming, confusing, and led to me not testing as rigarously as I should have been.  Proxy was created to speed up the testing of templates, by allowing the developer to quicky swap in placeholder tag data when the template renders.
 
-Follow me <a href='http://www.twitter.com/bryant_'>here</a> for more updates.
+Follow me <a href='http://www.twitter.com/bryant_'>here</a> for more release updates.
 
 ##Requirements
 
