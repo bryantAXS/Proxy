@@ -1,1 +1,0 @@
-<div id='proxy_cp_container'>  
