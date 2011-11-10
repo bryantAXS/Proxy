@@ -125,6 +125,20 @@
 			}
 
 		}
+
+		public function matrix_field_has_data($entry_id, $field_id)
+		{
+			
+			$query = $this->EE->db->query("SELECT * from exp_matrix_data md
+WHERE md.`entry_id` = ".$entry_id." AND md.`field_id` = ".$field_id.";");
+
+			if($query->num_rows() > 0){
+				return TRUE;
+			}else{
+				return FALSE;
+			}
+
+		}
 		
 	}
 	

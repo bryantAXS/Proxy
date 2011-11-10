@@ -240,6 +240,17 @@ class Proxy_ext {
                 //we don't want preg_replace_callback to execute if the field is set to not substitute, because it will remove the tag pair from the tagdata
                 if($this->field['substitution_type'] != "no_substitution")
                 {
+
+                  if($this->field['substitution_type'] == "empty")
+                  {
+                    if($this->field['field_type'] == "matrix")
+                    {
+                      if($this->sql->matrix_field_has_data($row['entry_id'], $this->field['field_id'])){ 
+                        continue;
+                      } 
+                    }
+                  }
+
                   $tagdata = preg_replace_callback("/\{({$field['field_name']}(\s+.*?)?)\}(.*?)\{\/{$field['field_name']}\}/s", array(&$this, '_parse_tag_pair'), $tagdata); 
                 }
               }
