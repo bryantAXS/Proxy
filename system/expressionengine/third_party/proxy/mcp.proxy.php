@@ -13,6 +13,7 @@ class Proxy_mcp
 	
 	public function __construct()
 	{
+		
 		$this->EE =& get_instance();
 		$this->site_id = $this->EE->config->item('site_id');
 		$this->base_url = BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=proxy';
