@@ -64,6 +64,44 @@ input.option_number{
   width:100px;
 }
 
+/* placeholder tags */
+.placeholder-tag-yellow{
+	background: transparent url('../images/proxy-sprite.png') no-repeat 100% -34px;
+	height:35px;
+	line-height:35px;
+	float:left;
+	padding: 0 28px 0 11px;
+	position:relative;
+}
+.placeholder-tag-yellow small{
+	background: transparent url('../images/proxy-sprite.png') no-repeat 0 0;
+	color:#282828;
+	display:block;
+	height:35px;
+	font-size:12px;
+	line-height:35px;
+	padding: 0 30px 0 10px;
+	/**/
+	text-shadow: 0px 1px 1px #ffffff;
+	filter: dropshadow(color=#ffffff, offx=0, offy=1);
+}
+.placeholder-tag-yellow a{
+	background: transparent url('../images/proxy-sprite.png') no-repeat 0 -138px;
+	display:block;
+	height:14px;
+	position:absolute;
+	width:14px;
+	right:10px;
+	top:10px;
+}
+
+.placeholder-tag-green{
+	
+}
+.paceholder-tag-green span{
+	
+}
+
 .toggle_channel{
   margin-left:10px;
   text-decoration:none;

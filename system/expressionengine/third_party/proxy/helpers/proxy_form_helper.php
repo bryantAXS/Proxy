@@ -89,6 +89,28 @@ function get_placeholder_index_input($channel_id, $field_id, $previous_setting =
 	return form_input($placeholder_index_input, $previous_setting, $additional_properties);
 }
 
+ /* Returns a placeholder tag, either with a single piece of data or for a loop iteration
+ *
+ * @param string $channel_fields - Should be an array of fields for the channel, indexed by the field_id
+ * @param string $channel_id - Channel id the fields are from
+ * @param string $selected_field_id 
+ * @return void
+ * @author Bryant Hughes
+ */
+function get_placeholder_tag($data){
+        
+  if(is_array($data)){
+    
+  }else{
+    
+    $markup = "<span class='placeholder-tag-yellow'><small>".$data."</small><a href='javascript:;' class='remove-tag'>&nbsp;</a></span>";
+
+  }
+
+  return $markup;
+  
+}
+
 
 
 

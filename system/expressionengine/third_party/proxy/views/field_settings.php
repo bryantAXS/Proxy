@@ -8,37 +8,39 @@
 
 	//make these arrays visible in javascript
 	echo "<script>var proxy_channels = " . json_encode($channels) . "; var proxy_fields = " . json_encode($fields) . ";</script>";
-	  
+	
+	//setting up our first table
   $this->table->clear();
   $this->table->set_template($cp_table_template);
 	$this->table->set_heading('Channel', 'Field');
-		
+			
+	//setting up the field dropdown data
 	$field_dropdowns = array();
-		
 	foreach($fields as $channel_id => $channel_fields)
 	{
 		$field_dropdowns[] = get_channel_fields_dropdown($channel_fields, $channel_id);
 	}
 	
+	//adding top most row, to select channel and channel fields
 	$this->table->add_row(get_channels_dropdown($channels),implode($field_dropdowns) . '<a href="javascript:;" class="inactive add_field"></a>');
 	
-	echo "<div class='box'>";
 	?>
+	
+	<div class='box'>
+		<p>
+			Delimit paceholders with "||" (no-quotes). For tag pairs with child tags (ie: matrix tags) use the following format, where N is the number of times you want the tagpair to loop: 
+			<pre>N||{cell_1::value,,cell_2::value}{cell_1::new value,,cell_2::new_value}</pre> 
+		</p>
+	</div>
 
-	<p>
-		Delimit paceholders with "||" (no-quotes). For tag pairs with child tags (ie: matrix tags) use the following format, where N is the number of times you want the tagpair to loop: 
-		<pre>N||{cell_1::value,,cell_2::value}{cell_1::new value,,cell_2::new_value}</pre> 
-	</p>
+	<div id='add_field_table'>
+		<?php echo $this->table->generate(); ?>
+	</div>
+
+	<div id='field_tables_container'>
 
 	<?php
-	echo "</div>";
 
-	echo "<div id='add_field_table'>";
-	echo $this->table->generate();
-	echo "</div>";
-	
-	echo "<div id='field_tables_container'>";
-	
 	echo form_open($form_action, '', '');
 	   
 	if( ! empty($fields_settings) ) {
@@ -66,9 +68,13 @@
 				$previous_setting_1 = $field_settings_data['placeholder_index'];
 	      $this->table->add_row('<span>Substitution Method</span>', get_substitution_method_dropdown($channel_id, $field_id, $previous_setting) . get_placeholder_index_input($channel_id, $field_id, $previous_setting_1));
 	      
-	      //Placeholders
-	      $this->table->add_row('<span>Placeholder(s)</span>', '<textarea rows="10" name="field_'.$channel_id.'_'.$field_id.'[placeholders]">'.stripslashes($field_settings_data['placeholders']).'</textarea>');
-		
+	      //Add Data Row
+	      $this->table->add_row('<span>Add Data</span>', '<textarea rows="10" name="field_'.$channel_id.'_'.$field_id.'[placeholders]">'.stripslashes($field_settings_data['placeholders']).'</textarea>');
+				
+				//Placeholders Row
+				$placeholder_tags_markup = get_placeholder_tag('test');
+				$this->table->add_row('<span>Placeholders</span>', $placeholder_tags_markup);
+
 		    echo $this->table->generate();
 		 
 		    }
