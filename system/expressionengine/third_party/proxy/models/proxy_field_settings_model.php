@@ -158,6 +158,7 @@ class Proxy_field_settings_model extends CI_Model {
 				,'substitution_method' => $field_data['substitution_method']
 				,'placeholders' => addslashes($field_data['placeholders'])
 				,'placeholder_index' => $field_data['placeholder_index']
+				,'placeholder_type' => $field_data['placeholder_type']
 			);
 			
 		}

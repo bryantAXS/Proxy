@@ -63,6 +63,13 @@ class Proxy_mcp
 		return $this->EE->load->view('module_settings', $this->data, TRUE);
 		
 	}
+
+	public function _dump($data)
+	{
+		  echo "<pre>"; 
+      print_r($dump); 
+      echo "</pre>";
+	}
 		
 	/**
 	 * CP Field settings
@@ -83,7 +90,7 @@ class Proxy_mcp
 		$this->data['channels'] = $this->sql->get_all_channels_by_id();
 		$this->data['fields'] = $this->sql->get_all_fields_by_channel_id();
 		$this->data['fields_settings'] = $this->EE->field_settings->get_settings();
-		
+
 		$view_code = '';
 		return $this->EE->load->view('field_settings', $this->data, TRUE);
 		

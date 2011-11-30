@@ -51,7 +51,7 @@
 				
 				$channel_id = $field_settings_data['channel_id'];
 				$field_id = $field_settings_data['field_id'];
-						
+
 				$field_data = $fields[$channel_id][$field_id];
 				
 				$this->table->clear();
@@ -67,13 +67,24 @@
 	     	$previous_setting = $field_settings_data['substitution_method'];
 				$previous_setting_1 = $field_settings_data['placeholder_index'];
 	      $this->table->add_row('<span>Substitution Method</span>', get_substitution_method_dropdown($channel_id, $field_id, $previous_setting) . get_placeholder_index_input($channel_id, $field_id, $previous_setting_1));
+
+	      //Placeholder Type
+	     	$placeholder_type = $field_settings_data['placeholder_type'];
+	      $this->table->add_row('<span>Placeholder Type</span>', get_placeholder_type_dropdown($channel_id, $field_id, $placeholder_type));
 	      
 	      //Add Data Row
-	      $this->table->add_row('<span>Add Data</span>', '<textarea rows="10" name="field_'.$channel_id.'_'.$field_id.'[placeholders]">'.stripslashes($field_settings_data['placeholders']).'</textarea>');
+	      $this->table->add_row('<span>Add Data</span>', '<textarea rows="5" name="field_'.$channel_id.'_'.$field_id.'[placeholders]">'.stripslashes($field_settings_data['placeholders']).'</textarea>');
 				
-				//Placeholders Row
-				$placeholder_tags_markup = get_placeholder_tag('test');
-				$this->table->add_row('<span>Placeholders</span>', $placeholder_tags_markup);
+				//create placeholder tags
+				$placeholders_arr = explode('||', $field_settings_data['placeholders']); 
+				$placeholders_tags = array();
+				foreach($placeholders_arr as $placeholder)
+				{
+					$placeholder_tags[] = get_placeholder_tag($placeholder);
+				}
+
+				//Placeholders Row 
+				$this->table->add_row('<span>Placeholders</span>', implode($placeholder_tags));
 
 		    echo $this->table->generate();
 		 

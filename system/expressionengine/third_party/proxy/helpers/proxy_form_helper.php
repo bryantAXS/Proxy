@@ -89,13 +89,24 @@ function get_placeholder_index_input($channel_id, $field_id, $previous_setting =
 	return form_input($placeholder_index_input, $previous_setting, $additional_properties);
 }
 
+function get_placeholder_type_dropdown($channel_id, $field_id, $previous_setting = FALSE)
+{
+  
+  $setting_name = 'field_'.$channel_id.'_'.$field_id.'[placeholder_type]';
+  
+  $settings = array();
+  $settings['single'] = "Single Tag";
+  $settings['loop'] = "Loop";
+  
+  $dropdown_class = 'class="placeholder_type"';
+   
+  return form_dropdown($setting_name, $settings, $previous_setting, $dropdown_class);
+}
+
  /* Returns a placeholder tag, either with a single piece of data or for a loop iteration
  *
- * @param string $channel_fields - Should be an array of fields for the channel, indexed by the field_id
- * @param string $channel_id - Channel id the fields are from
- * @param string $selected_field_id 
+ * @param string/array $data 
  * @return void
- * @author Bryant Hughes
  */
 function get_placeholder_tag($data){
         
