@@ -134,6 +134,13 @@ class Proxy_field_settings_model extends CI_Model {
 		}
 
 	}
+
+	function _dump($data)
+	{
+		  echo "<pre>"; 
+      print_r($data); 
+      echo "</pre>";
+	}
 		
 	function insert_new_field_settings()
 	{
@@ -141,13 +148,26 @@ class Proxy_field_settings_model extends CI_Model {
 		$error = false;
 		
 		$fields = array();
-		
+
+		//TODO: Cleanse the data from the post array before we insert it into the db
+		//TODO: call add_slashes for the data we are adding into the db
+
 		foreach($_POST as $field_name => $field_data){
 					
 			if($field_name == "Submit") continue;
 			
 			list($throw_away, $channel_id, $field_id) = explode('_', $field_name);
 			$override_substitution = $field_data['substitution_type'] == "global" ? 'n' : 'y';
+
+			if($field_data['placeholder_type'] == 'loop'){
+				$new_placeholder_arr = array();
+				foreach($field_data['placeholders'] as $json_str){
+					$new_placeholder_arr[] = json_decode($json_str);
+				}
+				$field_data['placeholders'] = json_encode($new_placeholder_arr);	
+			}else{
+				$field_data['placeholders'] = json_encode($field_data['placeholders']);
+			}
 			
 			$fields[] = array(
 				'site_id' => $this->site_id
@@ -156,15 +176,14 @@ class Proxy_field_settings_model extends CI_Model {
 				,'override_substitution_type' => $override_substitution
 				,'substitution_type' => $field_data['substitution_type']
 				,'substitution_method' => $field_data['substitution_method']
-				,'placeholders' => addslashes($field_data['placeholders'])
+				,'placeholders' => $field_data['placeholders']
 				,'placeholder_index' => $field_data['placeholder_index']
 				,'placeholder_type' => $field_data['placeholder_type']
 			);
 			
 		}
 		
-		// clense current settings out of DB : we add the WHERE site_id = $site_id, because the only setting we want to save is the module_id 
-		// setting, which is set to site_id 0 -- because its not site specific
+		// clense current settings out of DB : we add the WHERE site_id = $site_id, because the only setting we want to save is the module_id setting, which is set to site_id 0 -- because its not site specific
 		$sql = "DELETE FROM exp_proxy_channel_field_settings WHERE site_id = $this->site_id";
 		if( ! $this->db->query($sql)){
 			return FALSE;
@@ -175,6 +194,8 @@ class Proxy_field_settings_model extends CI_Model {
 		}else{
 			return TRUE;
 		}
+
+		return false;
 			
 	}
 		

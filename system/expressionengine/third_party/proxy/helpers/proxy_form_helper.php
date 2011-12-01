@@ -108,13 +108,24 @@ function get_placeholder_type_dropdown($channel_id, $field_id, $previous_setting
  * @param string/array $data 
  * @return void
  */
-function get_placeholder_tag($data){
+function get_placeholder_tag($placeholder, $channel_id, $field_id){
         
-  if(is_array($data)){
+  if(is_array($placeholder)){
     
+    //creating the placeholder string for the tag
+    $placeholder_str = '';
+    $i = 0;
+    foreach($placeholder as $cell_name => $value){
+      if($i > 0) $placeholder_str .= '  -  ';
+      $placeholder_str .= $cell_name . ' : ' . $value;
+      $i += 1;
+    }
+
+    $markup = "<span class='placeholder-tag-green'><small>".$placeholder_str."</small><a href='javascript:;' class='remove-tag'>&nbsp;</a><input value='".json_encode($placeholder)."' name='field_".$channel_id."_".$field_id."[placeholders][]' type='hidden' data-channel_id='".$channel_id."' data-field_id='".$field_id."' /></span>";
+
   }else{
     
-    $markup = "<span class='placeholder-tag-yellow'><small>".$data."</small><a href='javascript:;' class='remove-tag'>&nbsp;</a></span>";
+    $markup = "<span class='placeholder-tag-yellow'><small>".$placeholder."</small><a href='javascript:;' class='remove-tag'>&nbsp;</a><input value='".$placeholder."' name='field_".$channel_id."_".$field_id."[placeholders][]' type='hidden' data-channel_id='".$channel_id."' data-field_id='".$field_id."' /></span>";
 
   }
 

@@ -70,7 +70,7 @@ input.option_number{
 	height:35px;
 	line-height:35px;
 	float:left;
-	padding: 0 6px 0 11px;
+	padding: 0 6px 0 0;
 	position:relative;
 }
 .placeholder-tag-yellow small{
@@ -94,12 +94,42 @@ input.option_number{
 	right:10px;
 	top:10px;
 }
-
-.placeholder-tag-green{
-	
+.placeholder-tag-yellow input{
+	display:none;
 }
-.paceholder-tag-green span{
-	
+
+/** green **/
+.placeholder-tag-green{
+	background: transparent url('../images/proxy-sprite.png') no-repeat 100% -103px;
+	height:35px;
+	line-height:35px;
+	float:left;
+	padding: 0 6px 0 0;
+	position:relative;
+}
+.placeholder-tag-green small{
+	background: transparent url('../images/proxy-sprite.png') no-repeat 0 -69px;
+	color:#282828;
+	display:block;
+	height:35px;
+	font-size:12px;
+	line-height:35px;
+	padding: 0 30px 0 10px;
+	/**/
+	text-shadow: 0px 1px 1px #ffffff;
+	filter: dropshadow(color=#ffffff, offx=0, offy=1);
+}
+.placeholder-tag-green a{
+	background: transparent url('../images/proxy-sprite.png') no-repeat 0 -152px;
+	display:block;
+	height:14px;
+	position:absolute;
+	width:14px;
+	right:10px;
+	top:10px;
+}
+.placeholder-tag-green input{
+	display:none;
 }
 
 .toggle_channel{

@@ -1,6 +1,17 @@
 
 <?php
 
+	class Field{
+		var $channel_id = null;
+		var $field_id = null;
+		var $placeholder_type = null;
+		var $placeholders = null;
+	}
+
+	$loop_placeholders_arr = array();
+	$loop_placeholders_arr[]= array('cell_1' => 'aa', 'cell_2' => 'bb');
+	$loop_placeholders_arr[]= array('cell_1' => 'cc', 'cell_2' => 'dd');
+
   /*
   This view loops through each channel and each channel's fields and 
   sets up all of the per-field settings that are available to the admin.
@@ -27,7 +38,7 @@
 	?>
 	
 	<div class='box'>
-		<p>
+		<p> 
 			Delimit paceholders with "||" (no-quotes). For tag pairs with child tags (ie: matrix tags) use the following format, where N is the number of times you want the tagpair to loop: 
 			<pre>N||{cell_1::value,,cell_2::value}{cell_1::new value,,cell_2::new_value}</pre> 
 		</p>
@@ -54,35 +65,62 @@
 
 				$field_data = $fields[$channel_id][$field_id];
 				
+				
+				//creating new field object -- this will eventually be moved out of this view and into its own model
+				$field = new Field();
+				$field->channel_id = $channel_id;
+				$field->field_id = $field_id;
+				
+				$field->placeholder_type = $field_settings_data['placeholder_type'];
+				$field->placeholders = $field_settings_data['placeholders'];
+				
+				$field->channel_title = $field_data['channel_title'];
+				$field->field_label = $field_data['field_label'];
+				$field->field_type = $field_data['field_type'];
+
+				$field->substitution_type = $field_settings_data['substitution_type'];
+				$field->substitution_method = $field_settings_data['substitution_method'];
+				$field->placeholder_index = $field_settings_data['placeholder_index'];
+				$field->placeholder_type = $field_settings_data['placeholder_type'];
+
+				$field->placeholders = $field_settings_data['placeholders'];
+
+				//start field table
 				$this->table->clear();
 		    $this->table->set_template($cp_table_template);
-		    $this->table->set_heading($field_data['channel_title'] .' : '. $field_data['field_label'] . '<input type="hidden" channel_id="'.$channel_id.'" field_id="'.$field_id.'" class="hidden_field_data" />' , '<a class="remove_field"></a><a class="minimize_field"></a>');
-	      $this->table->add_row('<span>Field Type</span>',$field_data['field_type']);
+		    $this->table->set_heading($field->channel_title .' : '. $field->field_label . '<input type="hidden" channel_id="'.$field->channel_id.'" field_id="'.$field->field_id.'" class="hidden_field_data" />' , '<a class="remove_field"></a><a class="minimize_field"></a>');
+	      
+	      //field type
+	      $this->table->add_row('<span>Field Type</span>',$field->field_type);
 		     
 				//substituion type dropdown
-				$previous_setting = $field_settings_data['substitution_type'];
-		    $this->table->add_row('<span>Substitution Type</span></a>', get_substitution_type_dropdown($channel_id, $field_id, $previous_setting));
+		    $this->table->add_row('<span>Substitution Type</span></a>', get_substitution_type_dropdown($field->channel_id, $field->field_id, $field->substitution_type));
 		      
 	      //Substitution Methoid 
-	     	$previous_setting = $field_settings_data['substitution_method'];
-				$previous_setting_1 = $field_settings_data['placeholder_index'];
-	      $this->table->add_row('<span>Substitution Method</span>', get_substitution_method_dropdown($channel_id, $field_id, $previous_setting) . get_placeholder_index_input($channel_id, $field_id, $previous_setting_1));
+	      $this->table->add_row('<span>Substitution Method</span>', get_substitution_method_dropdown($field->channel_id, $field->field_id, $field->substitution_method) . get_placeholder_index_input($field->channel_id, $field->field_id, $field->placeholder_index));
 
 	      //Placeholder Type
-	     	$placeholder_type = $field_settings_data['placeholder_type'];
-	      $this->table->add_row('<span>Placeholder Type</span>', get_placeholder_type_dropdown($channel_id, $field_id, $placeholder_type));
+	      $this->table->add_row('<span>Placeholder Type</span>', get_placeholder_type_dropdown($field->channel_id, $field->field_id, $field->placeholder_type));
 	      
 	      //Add Data Row
-	      $this->table->add_row('<span>Add Data</span>', '<textarea rows="5" name="field_'.$channel_id.'_'.$field_id.'[placeholders]">'.stripslashes($field_settings_data['placeholders']).'</textarea>');
+	      $this->table->add_row('<span>Add Data</span>', '<textarea rows="5" name="">'.stripslashes($field->placeholders).'</textarea>');
 				
 				//create placeholder tags
-				$placeholders_arr = explode('||', $field_settings_data['placeholders']); 
-				$placeholders_tags = array();
-				foreach($placeholders_arr as $placeholder)
-				{
-					$placeholder_tags[] = get_placeholder_tag($placeholder);
+				if($field->placeholder_type == 'single'){
+					$placeholders_arr = explode('||', $field->placeholders); 
+					$placeholder_tags = array();
+					foreach($placeholders_arr as $placeholder)
+					{
+						$placeholder_tags[] = get_placeholder_tag($placeholder, $field->channel_id, $field->field_id);
+					}	
+				}else{
+					$placeholder_tags = array();
+					foreach($loop_placeholders_arr as $single_placeholder_loop_data)
+					{
+						$placeholder_tags[] = get_placeholder_tag($single_placeholder_loop_data, $field->channel_id, $field->field_id);
+					}
 				}
-
+				
 				//Placeholders Row 
 				$this->table->add_row('<span>Placeholders</span>', implode($placeholder_tags));
 
@@ -132,7 +170,10 @@
 					</td>
 				</tr>
 				<tr class="odd">
-					<td><span>Placeholder(s)</span></td><td><textarea rows="10" name="field_${channel_id}_${field_id}[placeholders]"></textarea></td>
+					<td><span>Add Data</span></td><td><textarea rows="10" name="field_${channel_id}_${field_id}[placeholders]"></textarea></td>
+				</tr>
+				<tr class="even">
+					<td><span>Placeholders</span></td><td></td>
 				</tr>
 			</tbody>
 		</table>
