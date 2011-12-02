@@ -103,19 +103,22 @@
 	      $this->table->add_row('<span>Placeholder Type</span>', get_placeholder_type_dropdown($field->channel_id, $field->field_id, $field->placeholder_type));
 	      
 	      //Add Data Row
-	      $this->table->add_row('<span>Add Data</span>', '<textarea rows="5" name="">'.stripslashes($field->placeholders).'</textarea>');
+	      $this->table->add_row('<span>Add Data</span>', '<textarea rows="5" name=""></textarea><a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a>');
 				
 				//create placeholder tags
 				if($field->placeholder_type == 'single'){
-					$placeholders_arr = explode('||', $field->placeholders); 
 					$placeholder_tags = array();
-					foreach($placeholders_arr as $placeholder)
+
+					//here after we decode, we are sending in actual string data
+					foreach(json_decode($field->placeholders) as $placeholder)
 					{
 						$placeholder_tags[] = get_placeholder_tag($placeholder, $field->channel_id, $field->field_id);
 					}	
 				}else{
 					$placeholder_tags = array();
-					foreach($loop_placeholders_arr as $single_placeholder_loop_data)
+
+					//here we are decoding an array of objects and passing the objects into the tag builder
+					foreach(json_decode($field->placeholders) as $single_placeholder_loop_data)
 					{
 						$placeholder_tags[] = get_placeholder_tag($single_placeholder_loop_data, $field->channel_id, $field->field_id);
 					}

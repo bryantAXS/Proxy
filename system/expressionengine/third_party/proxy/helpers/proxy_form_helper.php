@@ -110,7 +110,7 @@ function get_placeholder_type_dropdown($channel_id, $field_id, $previous_setting
  */
 function get_placeholder_tag($placeholder, $channel_id, $field_id){
         
-  if(is_array($placeholder)){
+  if(is_object($placeholder)){
     
     //creating the placeholder string for the tag
     $placeholder_str = '';
