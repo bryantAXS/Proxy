@@ -64,6 +64,26 @@ input.option_number{
   width:100px;
 }
 
+.tag_names_input{
+	width:99%;
+}
+.placeholder_input{
+	width:99%;
+}
+.placeholder_label{
+	display:block;
+	font-weight:bold;
+	margin:10px 0;
+}
+
+.single_input_container, .loop_input_container{
+	display:none;
+}
+.single_input_container.on, .loop_input_container.on{
+	display:block;
+}
+
+
 /* placeholder tags */
 .placeholder-tag-yellow{
 	background: transparent url('../images/proxy-sprite.png') no-repeat 100% -34px;

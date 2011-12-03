@@ -102,9 +102,12 @@
 	      //Placeholder Type
 	      $this->table->add_row('<span>Placeholder Type</span>', get_placeholder_type_dropdown($field->channel_id, $field->field_id, $field->placeholder_type));
 	      
+	      $single_input_container_class = $field->placeholder_type == "single" ? "on" : "";
+	      $loop_input_container_class = $field->placeholder_type == "loop" ? "on" : "";
+
 	      //Add Data Row
-	      $this->table->add_row('<span>Add Data</span>', '<textarea rows="5" name=""></textarea><a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a>');
-				
+	      $this->table->add_row('<span>Add Data</span>', '<div class="'.$single_input_container_class.' single_input_container has-layout"><textarea rows="5" class="placeholder_input"></textarea><a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a></div><div class="'.$loop_input_container_class.' loop_input_container has-layout"><label class="placeholder_label">Tag Name</label><input type="text" class="tag_names_input" /><label class="placeholder_label">Placeholder</label><textarea class="placeholder_input" rows="5" name=""></textarea><label class="placeholder_label">Number of Loops</label><input type="text" class="number_of_loops_input" /><a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a></div>');	
+		
 				//create placeholder tags
 				if($field->placeholder_type == 'single'){
 					$placeholder_tags = array();
@@ -125,7 +128,7 @@
 				}
 				
 				//Placeholders Row 
-				$this->table->add_row('<span>Placeholders</span>', implode($placeholder_tags));
+				$this->table->add_row('<span>Placeholders</span>', "<div class='placeholder_tags_container'>".implode($placeholder_tags)."</div>");
 
 		    echo $this->table->generate();
 		 
@@ -173,16 +176,60 @@
 					</td>
 				</tr>
 				<tr class="odd">
-					<td><span>Add Data</span></td><td><textarea rows="10" name="field_${channel_id}_${field_id}[placeholders]"></textarea></td>
+					<td><span>Placeholder Type</span></td><td><select name="field_1_1[placeholder_type]" class="placeholder_type">
+					<option value="single" selected="selected">Single Tag</option>
+					<option value="loop">Loop</option>
+					</select></td>
 				</tr>
 				<tr class="even">
-					<td><span>Placeholders</span></td><td></td>
+					<td>
+						<span>Add Data</span>
+					</td>
+					<td>
+						<div class=" single_input_container has-layout">
+							<textarea rows="5" class="placeholder_input"></textarea>
+							<a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a>
+						</div>
+						<div class="on loop_input_container has-layout">
+							<label class="placeholder_label">Tag Name</label>
+							<input type="text" class="tag_names_input">
+							<label class="placeholder_label">Placeholder</label>
+							<textarea class="placeholder_input" rows="5" name=""></textarea>
+							<label class="placeholder_label">Number of Loops</label>
+							<input type="text" class="number_of_loops_input" />
+							<a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a>
+						</div>
+					</td>
 				</tr>
+				<tr class="even">
+					<td><span>Placeholders</span></td><td><div class='placeholder_tags_container'></div></td>
+				</tr>
+
 			</tbody>
 		</table>
 
   </script>
+
+  <script id='single_tag' type="text/x-jquery-tmpl">
+  	
+    <span class='placeholder-tag-yellow'>
+    	<small>${placeholder}</small>
+    	<a href='javascript:;' class='remove-tag'>&nbsp;</a>
+    	<input value='${placeholder}' name='field_${channel_id}_${field_id}[placeholders][]' type='hidden' />
+    </span>
+
+  </script>
 	
+	<script id='loop_tag' type='text/x-jquery-tmpl'>
+		
+		<span class='placeholder-tag-green'>
+	  	<small>${placeholder_str}</small>
+	  	<a href='javascript:;' class='remove-tag'>&nbsp;</a>
+	  	<input value='${placeholder_json}' name='field_${channel_id}_${field_id}[placeholders][]' type='hidden' />
+	  </span>
+	
+	</script>
+
 	<?php
   
   echo form_submit(array('name' => 'Submit', 'id' => 'submit', 'value' => 'Update', 'class' => 'submit'));

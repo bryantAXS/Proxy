@@ -54,7 +54,54 @@ Field.prototype.bind_table_events = function(){
 	if(substitution_method == 'placeholder_index'){
 		self.$table.find('.substitution_method').next().show();
 	}
+
+	//add placeholder buttons
+	self.$table.find('a.button').bind('click',function(){
+		
+		var $button = $(this);
+		var $form_container = $button.parent();
+		
+		var placeholder_type = self.$table.find('.placeholder_type').val();
+		var placeholder = $form_container.find('.placeholder_input').val();
+
+		if(placeholder_type == 'single'){
+			
+				//building and addig new tag to the page
+			  $.tmpl($('#single_tag'), {
+			    
+					channel_id: self.channel_id
+					,field_id : self.field_id
+					,placeholder: placeholder
+			    
+				}).appendTo($form_container.find('.placeholder_tags_container'));
+				
+		}else if(placeholder_type == 'loop'){
+			
+			var number_of_loops = $form_container.find('.number_of_loops_input').val();
+			var cell_names = $form_container.find('.tag_names_input').val();
+
+			var cell_names_array = cell_names.split(',');
+			var placeholders_array = placeholder.split('||');
+
+			var cells = {};
+
+			for(a = 0; a < cell_names_array.length; a++){
+				var cell_name = cell_names_array[a];
+				var placeholder_value = placeholders_array[a];
+				cells[cell_name] = placeholder_value;	
+			}
+
+			var tag_data = {};
+			tag_data['number_of_loops'] = number_of_loops;
+			tag_data['placeholders'] = $.toJSON(cells);
+
+			console.log($.toJSON(tag_data));
+
+		}
+				
+	});
 	
+	//if the substitution method is set to placeholder_index, we want to show the input to set which index we want to use
 	self.$table.find('.substitution_method').bind('change',function(){
     
 		var $el = $(this);
@@ -67,10 +114,29 @@ Field.prototype.bind_table_events = function(){
     
   });
 
+  //toggling the input form for adding placeholders -- the single input form and loop input form are different
+  self.$table.find('.placeholder_type').bind('change',function(){
+  	
+  	var $el = $(this);
+
+  	if($el.val() == 'single'){
+      $on_el = $el.parent().parent().next().find('.single_input_container');
+      $on_el.addClass('on');
+      $on_el.next().removeClass('on');
+    }else{
+      $on_el = $el.parent().parent().next().find('.loop_input_container');
+      $on_el.addClass('on');
+      $on_el.prev().removeClass('on');
+    }
+
+  })
+
+  //minimizing table
 	self.$table.find('.minimize_field').bind('click',function(){
 		self.$table.find('tbody').toggle();
 	});
 	
+	//removing table
 	self.$table.find('.remove_field').bind('click',function(){
 		self.fields_cp_controller.turn_on_field_option(self.channel_id, self.field_id);
 		$(this).parents('table:eq(0)').remove();
