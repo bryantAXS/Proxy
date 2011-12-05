@@ -82,6 +82,7 @@
 				$field->substitution_method = $field_settings_data['substitution_method'];
 				$field->placeholder_index = $field_settings_data['placeholder_index'];
 				$field->placeholder_type = $field_settings_data['placeholder_type'];
+				$field->number_of_loops = $field_settings_data['number_of_loops'];
 
 				$field->placeholders = $field_settings_data['placeholders'];
 
@@ -101,12 +102,16 @@
 
 	      //Placeholder Type
 	      $this->table->add_row('<span>Placeholder Type</span>', get_placeholder_type_dropdown($field->channel_id, $field->field_id, $field->placeholder_type));
+
+	      //Number of Loops
+	      $number_of_loops = isset($field->number_of_loops) ? $field->number_of_loops : 0;
+	      $this->table->add_row('<span>Number of Loops</span>', get_number_of_loops_field($field->channel_id, $field->field_id, $number_of_loops));
 	      
 	      $single_input_container_class = $field->placeholder_type == "single" ? "on" : "";
 	      $loop_input_container_class = $field->placeholder_type == "loop" ? "on" : "";
 
 	      //Add Data Row
-	      $this->table->add_row('<span>Add Data</span>', '<div class="'.$single_input_container_class.' single_input_container has-layout"><textarea rows="5" class="placeholder_input"></textarea><a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a></div><div class="'.$loop_input_container_class.' loop_input_container has-layout"><label class="placeholder_label">Tag Name</label><input type="text" class="tag_names_input" /><label class="placeholder_label">Placeholder</label><textarea class="placeholder_input" rows="5" name=""></textarea><label class="placeholder_label">Number of Loops</label><input type="text" class="number_of_loops_input" /><a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a></div>');	
+	      $this->table->add_row('<span>Add Data</span>', '<div class="'.$single_input_container_class.' single_input_container has-layout"><textarea rows="5" class="placeholder_input"></textarea><a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a></div><div class="'.$loop_input_container_class.' loop_input_container has-layout"><label class="placeholder_label">Tag Name</label><input type="text" class="tag_names_input" /><label class="placeholder_label">Placeholder</label><textarea class="placeholder_input" rows="5" name=""></textarea><a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a></div>');	
 		
 				//create placeholder tags
 				if($field->placeholder_type == 'single'){
@@ -176,27 +181,33 @@
 					</td>
 				</tr>
 				<tr class="odd">
-					<td><span>Placeholder Type</span></td><td><select name="field_1_1[placeholder_type]" class="placeholder_type">
+					<td><span>Placeholder Type</span></td><td><select name="field_${channel_id}_${field_id}[placeholder_type]" class="placeholder_type">
 					<option value="single" selected="selected">Single Tag</option>
 					<option value="loop">Loop</option>
 					</select></td>
 				</tr>
-				<tr class="even">
+				<tr class="even" style="display: table-row; ">
+					<td>
+						<span>Number of Loops</span>
+					</td>
+					<td>
+						<input type="text" name="field_${channel_id}_${field_id}[number_of_loops]" value="0" placeholder="Number of Loops" class="">
+					</td>
+				</tr>
+				<tr class="odd">
 					<td>
 						<span>Add Data</span>
 					</td>
 					<td>
-						<div class=" single_input_container has-layout">
+						<div class="on single_input_container has-layout">
 							<textarea rows="5" class="placeholder_input"></textarea>
 							<a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a>
 						</div>
-						<div class="on loop_input_container has-layout">
+						<div class="loop_input_container has-layout">
 							<label class="placeholder_label">Tag Name</label>
 							<input type="text" class="tag_names_input">
 							<label class="placeholder_label">Placeholder</label>
 							<textarea class="placeholder_input" rows="5" name=""></textarea>
-							<label class="placeholder_label">Number of Loops</label>
-							<input type="text" class="number_of_loops_input" />
 							<a href="javascript:;" class="button block mt10 mb5">Add Placeholder</a>
 						</div>
 					</td>

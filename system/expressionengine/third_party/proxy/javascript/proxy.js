@@ -46,14 +46,24 @@ Field.prototype.initialize_existing_field = function(){
 	
 }
 
+/*
+*  This method binds various events to each specific field table.
+*/
+
 Field.prototype.bind_table_events = function(){
 	
 	var self = this;
 	
+	//showing the placeholder index if the page was loaded and it needs to be set
 	var substitution_method = self.$table.find('.substitution_method').val();
 	if(substitution_method == 'placeholder_index'){
 		self.$table.find('.substitution_method').next().show();
 	}
+
+	var placeholder_type = self.$table.find('.placeholder_type').val();
+	if(placeholder_type == 'single'){
+		self.$table.find('.placeholder_type').parents('tr:eq(0)').next().hide();
+	}	
 
 	//add placeholder buttons
 	self.$table.find('a.button').bind('click',function(){
@@ -73,29 +83,45 @@ Field.prototype.bind_table_events = function(){
 					,field_id : self.field_id
 					,placeholder: placeholder
 			    
-				}).appendTo($form_container.find('.placeholder_tags_container'));
+				}).appendTo(self.$table.find('.placeholder_tags_container'));
 				
 		}else if(placeholder_type == 'loop'){
 			
-			var number_of_loops = $form_container.find('.number_of_loops_input').val();
+			//getting the cellnames and placeholders and turning them into arrays to loop over
 			var cell_names = $form_container.find('.tag_names_input').val();
-
 			var cell_names_array = cell_names.split(',');
 			var placeholders_array = placeholder.split('||');
 
+			//our array that will collect all the data and eventually json'ify
 			var cells = {};
+			//string which gets added into the tag
+			var placeholder_str = '';
 
+			//loop over the arrays and pair up the variables
 			for(a = 0; a < cell_names_array.length; a++){
+				
+				//create array with values that we can JSON'ify and add to the input tag value
 				var cell_name = cell_names_array[a];
 				var placeholder_value = placeholders_array[a];
 				cells[cell_name] = placeholder_value;	
+				
+				//create string to add to tag
+				if(a > 0){
+					placeholder_str += " - ";
+				}
+				placeholder_str += cell_name + ' : ' + placeholder_value;
+					
 			}
 
-			var tag_data = {};
-			tag_data['number_of_loops'] = number_of_loops;
-			tag_data['placeholders'] = $.toJSON(cells);
-
-			console.log($.toJSON(tag_data));
+			//building and addig new tag to the page
+		  $.tmpl($('#loop_tag'), {
+		    
+				channel_id: self.channel_id
+				,field_id : self.field_id
+				,placeholder_json: $.toJSON(cells)
+				,placeholder_str: placeholder_str
+		    
+			}).appendTo(self.$table.find('.placeholder_tags_container'));
 
 		}
 				
@@ -119,15 +145,37 @@ Field.prototype.bind_table_events = function(){
   	
   	var $el = $(this);
 
+  	//if the user switches placeholder type, we need to clear the existing tags, so the data does not get corrupted
+  	if($el.parents('tbody').find('.placeholder_tags_container span').length){
+  		var clear = confirm("Changing Placeholder Type will clear your existing placeholders for this field. Continue?");
+  		if(clear){
+  			$el.parents('tbody').find('.placeholder_tags_container span').remove();
+  		}else{
+  			$el.find('option').not(':selected').attr('selected','selected');
+  			$el.find('option:selected').attr('selected','');
+  			return;	
+  		}
+  	}
+
+  	//change the add data form
   	if($el.val() == 'single'){
-      $on_el = $el.parent().parent().next().find('.single_input_container');
+      
+      $on_el = $el.parent().parent().next().next().find('.single_input_container');
       $on_el.addClass('on');
       $on_el.next().removeClass('on');
-    }else{
-      $on_el = $el.parent().parent().next().find('.loop_input_container');
+  		
+  		//hide the number_of_loops input
+  		$el.parents('tr:eq(0)').next().hide();  
+
+  	}else{
+      
+      $on_el = $el.parent().parent().next().next().find('.loop_input_container');
       $on_el.addClass('on');
       $on_el.prev().removeClass('on');
-    }
+  		
+  		//show the number_of_loops input
+  		$el.parents('tr:eq(0)').next().show();  
+  	}
 
   })
 

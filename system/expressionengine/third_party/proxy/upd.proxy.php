@@ -70,7 +70,8 @@ class Proxy_upd
 			'substitution_method' => array('type' => 'varchar', 'constraint' => '20', 'null' => FALSE),
 			'placeholders' => array('type' => 'varchar', 'constraint' => '9999', 'null' => FALSE),
 			'placeholder_index' => array('type' => 'int', 'constraint' => '8', 'unsigned' => TRUE, 'null' => TRUE),
-			'placeholder_type' => array('type' => 'varchar', 'constraint' => '20', 'null' => FALSE)
+			'placeholder_type' => array('type' => 'varchar', 'constraint' => '20', 'null' => FALSE),
+			'number_of_loops' => array('type' => 'int', 'constraint' => '5', 'unsigned' => TRUE, 'null' => TRUE)
 		);
 		
 		$this->EE->dbforge->add_field($fields);

@@ -133,6 +133,17 @@ function get_placeholder_tag($placeholder, $channel_id, $field_id){
   
 }
 
+function get_number_of_loops_field($channel_id, $field_id, $previous_setting = '')
+{
+  $number_of_loops_input = array(
+    'name' => 'field_'.$channel_id.'_'.$field_id.'[number_of_loops]'
+  );
+
+  $additional_properties = 'placeholder="Number of Loops" class=""';
+
+  return form_input($number_of_loops_input, $previous_setting, $additional_properties);
+}
+
 
 
 

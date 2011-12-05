@@ -44,7 +44,7 @@ class Proxy_field_settings_model extends CI_Model {
 		
 		else
 		{
-			$query = $this->db->query("SELECT fs.site_id, fs.channel_id, fs.field_id, fs.override_substitution_type, fs.substitution_type, fs.substitution_method, fs.placeholders, fs.placeholder_index, cf.field_name, cf.field_type
+			$query = $this->db->query("SELECT fs.site_id, fs.channel_id, fs.field_id, fs.override_substitution_type, fs.substitution_type, fs.substitution_method, fs.placeholders, fs.placeholder_index, cf.field_name, cf.field_type, fs.number_of_loops
 	    FROM exp_proxy_channel_field_settings fs
 	    JOIN exp_channel_fields cf ON cf.field_id = fs.field_id 
 	    WHERE fs.site_id = ". $this->site_id);
@@ -179,6 +179,7 @@ class Proxy_field_settings_model extends CI_Model {
 				,'placeholders' => $field_data['placeholders']
 				,'placeholder_index' => $field_data['placeholder_index']
 				,'placeholder_type' => $field_data['placeholder_type']
+				,'number_of_loops' => $field_data['number_of_loops']
 			);
 			
 		}
