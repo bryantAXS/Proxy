@@ -49,7 +49,6 @@ Field.prototype.initialize_existing_field = function(){
 /*
 *  This method binds various events to each specific field table.
 */
-
 Field.prototype.bind_table_events = function(){
 	
 	var self = this;
@@ -60,10 +59,19 @@ Field.prototype.bind_table_events = function(){
 		self.$table.find('.substitution_method').next().show();
 	}
 
+	//we need to hude the number of loops field when its not needed
 	var placeholder_type = self.$table.find('.placeholder_type').val();
 	if(placeholder_type == 'single'){
 		self.$table.find('.placeholder_type').parents('tr:eq(0)').next().hide();
-	}	
+	}
+  
+  //removing tag from placeholders container
+  $('.remove-tag').live('click',function(){
+  	$(this).parents('.placeholder-tag-green:eq(0), .placeholder-tag-yellow:eq(0)').remove();
+  });
+
+  //init tooltips
+  $('span.placeholder-tag-green, span.placeholder-tag-yellow').tipsy({fade: true, gravity: 's', live: true, delayIn: 300, delayOut: 300, html: true});	
 
 	//add placeholder buttons
 	self.$table.find('a.button').bind('click',function(){
@@ -76,12 +84,24 @@ Field.prototype.bind_table_events = function(){
 
 		if(placeholder_type == 'single'){
 			
+				var clean_placeholder = placeholder.replace(/(<([^>]+)>)/ig,"");
+				var clean_trimmed_placeholder = clean_placeholder.length > 20 ? clean_placeholder.slice(0,20) + '...' : clean_placeholder;
+
+				//tooltip
+				if(placeholder != placeholder.replace(/(<([^>]+)>)/ig,"")){
+					tool_tip_markup = "<div><code>"+placeholder+"</code></div>";
+				}else{
+					tool_tip_markup = "<div><p>"+placeholder+"</p></div>";
+				}
+
 				//building and addig new tag to the page
 			  $.tmpl($('#single_tag'), {
 			    
 					channel_id: self.channel_id
 					,field_id : self.field_id
 					,placeholder: placeholder
+					,clean_trimmed_placeholder: clean_trimmed_placeholder
+					,tool_tip_markup: tool_tip_markup
 			    
 				}).appendTo(self.$table.find('.placeholder_tags_container'));
 				
@@ -92,34 +112,16 @@ Field.prototype.bind_table_events = function(){
 			var cell_names_array = cell_names.split(',');
 			var placeholders_array = placeholder.split('||');
 
-			//our array that will collect all the data and eventually json'ify
-			var cells = {};
-			//string which gets added into the tag
-			var placeholder_str = '';
-
-			//loop over the arrays and pair up the variables
-			for(a = 0; a < cell_names_array.length; a++){
-				
-				//create array with values that we can JSON'ify and add to the input tag value
-				var cell_name = cell_names_array[a];
-				var placeholder_value = placeholders_array[a];
-				cells[cell_name] = placeholder_value;	
-				
-				//create string to add to tag
-				if(a > 0){
-					placeholder_str += " - ";
-				}
-				placeholder_str += cell_name + ' : ' + placeholder_value;
-					
-			}
+			var placeholder_tag_data = self.parse_loop_tag_data(cell_names_array, placeholders_array);
 
 			//building and addig new tag to the page
 		  $.tmpl($('#loop_tag'), {
 		    
 				channel_id: self.channel_id
 				,field_id : self.field_id
-				,placeholder_json: $.toJSON(cells)
-				,placeholder_str: placeholder_str
+				,placeholder_json: $.toJSON(placeholder_tag_data.cells)
+				,placeholder_str: placeholder_tag_data.placeholder_str
+				,tool_tip_markup: placeholder_tag_data.tool_tip_markup
 		    
 			}).appendTo(self.$table.find('.placeholder_tags_container'));
 
@@ -177,7 +179,7 @@ Field.prototype.bind_table_events = function(){
   		$el.parents('tr:eq(0)').next().show();  
   	}
 
-  })
+  });
 
   //minimizing table
 	self.$table.find('.minimize_field').bind('click',function(){
@@ -190,6 +192,49 @@ Field.prototype.bind_table_events = function(){
 		$(this).parents('table:eq(0)').remove();
 	});
  	
+}
+
+// helper method for adding a loop placeholder tag to the page.  it does some processing based on the cell names
+// and placeholder data and returns markup which is used when rendering the tag
+Field.prototype.parse_loop_tag_data = function(cell_names_array, placeholders_array){
+
+	var self = this;
+
+	var cells = {};														//our array that will collect all the data and eventually json'ify
+	var placeholder_str = '';									//string which gets added into the tag
+	var tool_tip_markup = "<div>";						//tooltip markup
+
+	//loop over the arrays and pair up the variables
+	for(a = 0; a < cell_names_array.length; a++){
+		
+		var cell_name = cell_names_array[a]; 							//individual cell name
+		var placeholder_value = placeholders_array[a];		//individual cell placeholder value
+		cells[cell_name] = placeholder_value;							//adding the cell to the main array
+		
+		//create string to add to tag
+		if(a > 0){
+			placeholder_str += " - ";
+		}
+
+		//stripping html tags
+		clean_value = placeholder_value.replace(/(<([^>]+)>)/ig,"");
+
+		//if the string is longer than 10 characters we want to trip it down to 10
+		placeholder_str += clean_value.length > 10 ? cell_name + ' : ' + clean_value.slice(0,10) + ".." : cell_name + " : " + clean_value				
+			
+		//generating tooltip markup
+		if(placeholder_value != clean_value){
+			tool_tip_markup += "<label>"+cell_name+":</label><code>"+placeholder_value+"</code>";
+		}else{
+			tool_tip_markup += "<label>"+cell_name+":</label><p>"+placeholder_value+"</p>";
+		}
+
+	}
+
+	tool_tip_markup += "</div>";
+
+	return {cells: cells, placeholder_str: placeholder_str, tool_tip_markup: tool_tip_markup};
+
 }
 
 Field.prototype.create_table = function(){

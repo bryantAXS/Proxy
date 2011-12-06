@@ -223,8 +223,8 @@
 
   <script id='single_tag' type="text/x-jquery-tmpl">
   	
-    <span class='placeholder-tag-yellow'>
-    	<small>${placeholder}</small>
+    <span class='placeholder-tag-yellow' title="${tool_tip_markup}">
+    	<small>${clean_trimmed_placeholder}</small>
     	<a href='javascript:;' class='remove-tag'>&nbsp;</a>
     	<input value='${placeholder}' name='field_${channel_id}_${field_id}[placeholders][]' type='hidden' />
     </span>
@@ -233,7 +233,7 @@
 	
 	<script id='loop_tag' type='text/x-jquery-tmpl'>
 		
-		<span class='placeholder-tag-green'>
+		<span class='placeholder-tag-green' title="${tool_tip_markup}">
 	  	<small>${placeholder_str}</small>
 	  	<a href='javascript:;' class='remove-tag'>&nbsp;</a>
 	  	<input value='${placeholder_json}' name='field_${channel_id}_${field_id}[placeholders][]' type='hidden' />

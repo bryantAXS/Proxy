@@ -103,7 +103,8 @@ function get_placeholder_type_dropdown($channel_id, $field_id, $previous_setting
   return form_dropdown($setting_name, $settings, $previous_setting, $dropdown_class);
 }
 
- /* Returns a placeholder tag, either with a single piece of data or for a loop iteration
+ /* Returns a placeholder tag, either with a single piece of data or for a loop iteration.
+ *  
  *
  * @param string/array $data 
  * @return void
@@ -112,20 +113,49 @@ function get_placeholder_tag($placeholder, $channel_id, $field_id){
         
   if(is_object($placeholder)){
     
-    //creating the placeholder string for the tag
-    $placeholder_str = '';
-    $i = 0;
+    $placeholder_str = '';              //placeholder string, which gets html characters remove and length trimmed
+    $tool_tip_markup = '<div>';         //markup for the tool tip when you hover above the tag
+    $i = 0;                     
+    
+    //loop over each placeholder tag
     foreach($placeholder as $cell_name => $value){
-      if($i > 0) $placeholder_str .= '  -  ';
-      $placeholder_str .= $cell_name . ' : ' . $value;
+      
+      if($i > 0) $placeholder_str .= '  ,  ';
+      
+      $clean_value = strip_tags($value);
+      
+      //creating the placeholder string from the clean value.  trimming to 10 characters if necessary.
+      $placeholder_str .= strlen($clean_value) > 10 ? $cell_name . ' : ' . trim(substr($clean_value, 0, 10)) . ".." : $cell_name . ' : ' . $clean_value;
+
+      //building tooltip markup. 2 versions, one for a placeholder with html and another for one without
+      if($value != strip_tags($value)){
+        //contains HTML
+        $tool_tip_markup .= "<label>".$cell_name.":</label><code>".htmlspecialchars($value)."</code>";
+      }else{
+        $tool_tip_markup .= "<label>".$cell_name.":</label><p>".$value."</p>";
+      }
+      
       $i += 1;
     }
 
-    $markup = "<span class='placeholder-tag-green'><small>".$placeholder_str."</small><a href='javascript:;' class='remove-tag'>&nbsp;</a><input value='".json_encode($placeholder)."' name='field_".$channel_id."_".$field_id."[placeholders][]' type='hidden' data-channel_id='".$channel_id."' data-field_id='".$field_id."' /></span>";
+    $tool_tip_markup .= "</div>";
+
+    $markup = "<span class='placeholder-tag-green' title='".$tool_tip_markup."'><small>".$placeholder_str."</small><a href='javascript:;' class='remove-tag'>&nbsp;</a><input value='".json_encode($placeholder)."' name='field_".$channel_id."_".$field_id."[placeholders][]' type='hidden' data-channel_id='".$channel_id."' data-field_id='".$field_id."' /></span>";
 
   }else{
     
-    $markup = "<span class='placeholder-tag-yellow'><small>".$placeholder."</small><a href='javascript:;' class='remove-tag'>&nbsp;</a><input value='".$placeholder."' name='field_".$channel_id."_".$field_id."[placeholders][]' type='hidden' data-channel_id='".$channel_id."' data-field_id='".$field_id."' /></span>";
+    $clean_placeholder = strip_tags($placeholder);
+    $clean_trimmed_placeholder = strlen($clean_placeholder) > 20 ? trim(substr($clean_placeholder, 0, 20)) : $clean_placeholder;
+
+    //tooltip markup
+    if($placeholder != strip_tags($placeholder)){
+      //contains HTML
+      $tool_tip_markup = "<div><code>".htmlspecialchars($placeholder)."</code></div>";
+    }else{
+      $tool_tip_markup = "<div><p>".$placeholder."</p></div>";
+    }
+
+    $markup = "<span class='placeholder-tag-yellow' title='".$tool_tip_markup."'><small>".$clean_trimmed_placeholder."</small><a href='javascript:;' class='remove-tag'>&nbsp;</a><input value='".$placeholder."' name='field_".$channel_id."_".$field_id."[placeholders][]' type='hidden' data-channel_id='".$channel_id."' data-field_id='".$field_id."' /></span>";
 
   }
 
@@ -143,17 +173,3 @@ function get_number_of_loops_field($channel_id, $field_id, $previous_setting = '
 
   return form_input($number_of_loops_input, $previous_setting, $additional_properties);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
