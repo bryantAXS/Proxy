@@ -53,3 +53,5 @@ There are no module specific template tags at this time.
 
 ## Known Issues
 
+Proxy only works inside the Channel Entries Loop, and has only been tested with the standard text, textarea, dropdown, etc. fields; also the matrix field type.  Proxy may work with others, but it has not been tested thouroughly with them.
+
