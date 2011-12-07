@@ -80,7 +80,7 @@ Field.prototype.bind_table_events = function(){
 		var $form_container = $button.parent();
 		
 		var placeholder_type = self.$table.find('.placeholder_type').val();
-		var placeholder = $form_container.find('.placeholder_input').val();
+		var placeholder = $.trim($form_container.find('.placeholder_input').val());
 
 		if(placeholder_type == 'single'){
 			
@@ -111,6 +111,16 @@ Field.prototype.bind_table_events = function(){
 			var cell_names = $form_container.find('.tag_names_input').val();
 			var cell_names_array = cell_names.split(',');
 			var placeholders_array = placeholder.split('||');
+
+			//trim the white space
+			$.each(cell_names_array, function(index, value){
+				cell_names_array[index] = $.trim(this);			
+			});
+
+			//trim the white space
+			$.each(placeholders_array, function(index, value){
+				placeholders_array[index] = $.trim(this);			
+			});
 
 			var placeholder_tag_data = self.parse_loop_tag_data(cell_names_array, placeholders_array);
 

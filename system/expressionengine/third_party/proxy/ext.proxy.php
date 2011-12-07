@@ -120,6 +120,13 @@ class Proxy_ext {
        }
     }
 
+    public function _dump($data)
+    {
+      echo "<pre>"; 
+      print_r($data); 
+      echo "</pre>";
+    }
+
     /**
      * Our Hook'ed Method, this handles substitution for single variable tags
      * @private 
@@ -154,14 +161,13 @@ class Proxy_ext {
               $substitution_type = $field_settings['substitution_type'];
               $substitution_method = $field_settings['substitution_method'];
 
-              $placeholders = $field_settings['placeholders'];
+              $placeholders_array = json_decode($field_settings['placeholders']);
               if($substitution_method == 'placeholder_index'){              
                 $placeholder_index = $field_settings['placeholder_index'];
               }
 
               $field_id = $field_settings['field_id'];
 
-              
               //depending on what substitution type we are using, we need to have different params for the _get_placeholder() method.
               //each of the endpoints here re-write the field_id value for each row, effectively re-writing the data that will be substituted by the template parser.
               switch($substitution_type)
@@ -169,9 +175,9 @@ class Proxy_ext {
                 case 'all':
                   
                   if($substitution_method == 'random'){
-                    $row['field_id_'.$field_id] = $this->_get_placeholder($placeholders);
+                    $row['field_id_'.$field_id] = $placeholders_array[array_rand($placeholders_array)];
                   }else{
-                    $row['field_id_'.$field_id] = $this->_get_placeholder($placeholders, $placeholder_index);
+                    $row['field_id_'.$field_id] = $placeholders_array[$placeholder_index];
                   }
 
                 break;
@@ -182,9 +188,9 @@ class Proxy_ext {
 
                   if( empty($field_name) ){
                     if($substitution_method == 'random'){
-                      $row['field_id_'.$field_id] = $this->_get_placeholder();
+                      $row['field_id_'.$field_id] = $placeholders_array[array_rand($placeholders_array)];
                     }else{
-                      $row['field_id_'.$field_id] = $this->_get_placeholder($placeholders, $placeholder_index);
+                      $row['field_id_'.$field_id] = $placeholders_array[$placeholder_index];
                     }
                   }
 
@@ -240,7 +246,6 @@ class Proxy_ext {
                 //we don't want preg_replace_callback to execute if the field is set to not substitute, because it will remove the tag pair from the tagdata
                 if($this->field['substitution_type'] != "no_substitution")
                 {
-
                   if($this->field['substitution_type'] == "empty")
                   {
                     if($this->field['field_type'] == "matrix")
@@ -280,14 +285,13 @@ class Proxy_ext {
       $substitution_type = $this->field['substitution_type'];
       $substitution_method = $this->field['substitution_method'];
 
-      $placeholders = $this->field['placeholders'];
+      $placeholder_tags = json_decode($this->field['placeholders']);
+      $number_of_loops = $this->field['number_of_loops'];
+      $number_of_loops = $number_of_loops > 0 ? $number_of_loops : 1;
+
       if($substitution_method == 'placeholder_index'){              
         $placeholder_index = $this->field['placeholder_index'];
       }
-
-      //get number of loops we need to run
-      preg_match("/^[0-9]*/", $placeholders, $number_of_loops);
-      $number_of_loops = $number_of_loops[0] > 0 ? $number_of_loops[0] : 1;
 
       $cell_data = array();
 
@@ -299,9 +303,9 @@ class Proxy_ext {
         case 'all':
 
           if($substitution_method == 'random'){
-            $cell_data[] = $this->_get_pair_placeholders($placeholders);
+            $cell_data[] = $this->_object_to_array($placeholder_tags[array_rand($placeholder_tags)]);
           }else{
-            $cell_data[] = $this->_get_pair_placeholders($placeholders, $placeholder_index);
+            $cell_data[] = $this->_object_to_array($placeholder_tags[$placeholder_index]);
           }
 
         break;
@@ -313,9 +317,9 @@ class Proxy_ext {
           //$field_name = $row['field_id'] . $field_id;
           //if( empty($field_name) ){
             if($substitution_method == 'random'){
-              $cell_data[] = $this->_get_pair_placeholders($placeholders);
+              $cell_data[] = $this->_object_to_array($placeholder_tags[array_rand($placeholder_tags)]);
             }else{
-              $cell_data[] = $this->_get_pair_placeholders($placeholders, $placeholder_index);
+              $cell_data[] = $this->_object_to_array($placeholder_tags[$placeholder_index]);
             }
           //}
 
@@ -399,56 +403,18 @@ class Proxy_ext {
       }
     }
 
-    /*
-    * This function breaks up the placeholder string used for tag pairs, and sets appropriate values for each field
-    */
-    function _get_pair_placeholders($placeholders, $placeholder_index = FALSE)
-    {      
+    function _object_to_array($object)
+    {
+      if(is_object($object)){
+        $object = get_object_vars($object);
+      } 
 
-      //remove "number of loops" from beginning of string
-      $placeholders = preg_replace("/^[0-9]*/", "", $placeholders);
-
-      //gets each individual set of fields wrapped in {}
-      preg_match_all("/\{[^\{\}]+\}/", $placeholders, $placeholders_temp_arr);
-      $placeholders_temp_arr = $placeholders_temp_arr[0];
-
-      $placeholders_arr = array();
-      $return_placeholders_arr = array();
-
-      //loops through each set of variable pairs, which were wrapped in {}
-      foreach($placeholders_temp_arr as $i => $placeholder_str){
-          
-         //remove tag boundaries {}
-         $placeholder_str = str_replace('{', '', $placeholder_str);
-         $placeholder_str = str_replace('}', '', $placeholder_str);
-        
-         //get each individual field
-         $field_arr = array();
-
-         $fields = explode(",,", $placeholder_str);
-          
-         foreach($fields as $field){
-           $field_data = explode('::', $field);
-           $field_name = trim($field_data[0]);
-           $field_arr[$field_name] = $field_data[1];
-         }
-
-         $placeholders_arr[] = $field_arr; 
-
-      }
-
-      // NOTE: We need to be returning an array keyed by the short field name (ie: field_1) with the 
-      // fields value as the array value... so an array with two fields (field_1 and field_2) with the values
-      // "aa" and "bb" respectively would need to look like this
-      // array("field_1" => "aa", "field_2" => "bb")
-
-      //if we have a placeholder index lets use that placeholder value
-      if($placeholder_index){
-        return $placeholders_arr[$placeholder_index];
+      if(is_array($object)){
+        return array_map(null, $object);
       }else{
-        return $placeholders_arr[array_rand($placeholders_arr)];
+        return $object;
       }
-
     }
+
 }
 // END CLASS
