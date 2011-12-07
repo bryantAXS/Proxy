@@ -38,9 +38,29 @@
 	?>
 	
 	<div class='box'>
+		<p>
+			<strong>How-To</strong>	
+		</p>
 		<p> 
-			Delimit paceholders with "||" (no-quotes). For tag pairs with child tags (ie: matrix tags) use the following format, where N is the number of times you want the tagpair to loop: 
-			<pre>N||{cell_1::value,,cell_2::value}{cell_1::new value,,cell_2::new_value}</pre> 
+			For single tags, add your placeholder text into the Add Data field and click Add Placeholder to create your tag.  
+		</p>
+		<p>
+			For loop tags, enter the loop tag names into the Tag Name field (comma delimited).  Then enter the corresponding data into the Placeholder(s) field, double-pipe delimited.	
+		</p>
+		<p>
+			<strong>Loop Example:</strong> <br><br> For a Matrix field with the cell's named {cell_1} and {cell_2}, which have example placeholder data of "test 1" and "test 2", respectively:  
+
+			<br><br>
+
+			Tag Name field: <code>cell_1, cell_2</code> <br><br>
+			Placeholder field:  <code>test 1 || test 2</code> 
+
+			<br><br>
+
+			Then click Add Placeholder.
+		</p>
+		<p>
+			Make sure you click the Update button at the bottom to save all your fields after you have made modifications.
 		</p>
 	</div>
 
