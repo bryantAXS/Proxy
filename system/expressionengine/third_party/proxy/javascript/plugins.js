@@ -61,9 +61,12 @@ return'"'+string+'"';};})(jQuery);
                 
                 //bryant hack to show actual code inside tooltip
                 if($tip.find('.tipsy-inner code').length){
-                  var $el = $tip.find('.tipsy-inner code'); 
-                  var code = $el.html();
-                  $el.text(code);
+                  $tip.find('.tipsy-inner code').each(function(){
+                    var $el = $(this);    
+                    var code = $el.html();
+                    $el.text(code);    
+                }); 
+                  
                 }
 
                 $tip[0].className = 'tipsy'; // reset classname in case of dynamic gravity
