@@ -1,5 +1,3 @@
-NOTE: This is not production worthy yet.  Please give it a go if you would like to test, but I would not recommend using it on a production site.
-
 #Proxy
 
 Proxy is an EE2.0 Module used to substitue template tags with placeholder data, in order to more efficiently and effectively test your templates.
@@ -19,25 +17,39 @@ Follow me <a href='http://www.twitter.com/bryant_'>here</a> for more release upd
 3. Turn on the module by toggling the Substitution Enabled setting.
 
 ##Usage
-- After turning on the Module by togging the Substituion Enabled setting, click on the Field Settings button.
-- On the field settings field, select the Channel and Channel Field you want to setup a placeholder for, then click the + button.
-- After the new field table has been created, set the preferences for that field:
+* After turning on the Module by togging the Substituion Enabled setting, click on the Field Settings button.
+* On the field settings field, select the Channel and Channel Field you want to setup a placeholder for, then click the + button.
+* After the new field table has been created, set the preferences for that field:
 
-		- Substitution Type: Lets you decide when to substitue data. (Please see Known Issues for a few nuances)
-		- Substitution Method: How to substitue data; Either randomly, based on the placeholders you provide, or using the Placeholder Index, where you provide the index number of the placeholder which you want to use.
-		- Placeholder(s):  The actual data you want to substitute.  For single tags, you can delimit multiple options using || . For tagpairs with child tags (ie: Matrix tags), use the format N||{field_1::value_1,,field_2::value_2}{field_1::value_3,,field_2::value_4}, where N is the number of times you want the tagpair to loop.
+- Substitution Type: Lets you decide when to substitue data. (Please see Known Issues for a few nuances)
+- Substitution Method: How to substitue data; Either randomly, based on the placeholders you provide, or using the Placeholder Index, where you provide the index number of the placeholder which you want to use.
+- Placeholder Type: Either Single or Loop.  Single is for normal EE tags.  Loop is for Matrix fields which loop over tags.
+- Add Data(s): For single tags, add your placeholders here.  For loops, the form adds Number of Loops field, Tag Name field and Placeholder field. The Number of Loops field is how many times you want to loop to iterate.
+- Placeholders: Where you actual placeholders will appear.
 
-###Tagpair Example:  
+### Add Single Tag Placeholder:
 
-If you have a matrix field called People, with two cells called person_name and person_age, and you want that tagpair to loop three times.
+After a field has been created and Placeholder Type is set to single, add placeholder text to the Placeholder field and click Add Placeholder.
 
-`3||{person_name::bryant,,person_age::27}{person_name::barclay,,person_age::17}`
+After all fields and placeholders have been added, click Update to save your fields.
 
-In the previous example, if we have the Substitution Method set to Random, it will loop 3 times, selecting one of the data sets at random each time.  If the Substitution Method is set to Placeholder Index, and you provide the index 0, it will loop three times, always displaying the first dataset (index 0).
+###Loop Example:
+
+After a field has been created and Placeholder Type is set to loop, for a loop field that has 2 tags: {tag_1} and {tag_2}, with corresponding placeholders "test 1" and "test 2": 
+
+The Tag names field should have:
+
+	tag_1, tag_2
+
+The Placeholders field should have:
+
+	test 1 || test 2
+
+Click Add Placeholder.
 
 ##Template Tags
 
 There are no module specific template tags at this time.
 
 ## Known Issues
-- Substituion Only Empty/Blank Data does not currently work for tagpair data.
+
