@@ -1,7 +1,7 @@
 <?php
 class Proxy_upd
 {
-	public $version = '0.1';
+	public $version = '1.0';
 	
 	public function __construct()
 	{
