@@ -113,6 +113,10 @@ return'"'+string+'"';};})(jQuery);
                 } else {
                     $tip.css({visibility: 'visible', opacity: this.options.opacity});
                 }
+
+                $(this.options.remove_element).bind('click',function(){
+                  $tip.remove();
+                });
             }
         },
         
@@ -213,6 +217,11 @@ return'"'+string+'"';};})(jQuery);
                 eventIn  = options.trigger == 'hover' ? 'mouseenter' : 'focus',
                 eventOut = options.trigger == 'hover' ? 'mouseleave' : 'blur';
             this[binder](eventIn, enter)[binder](eventOut, leave);
+
+        if(options.remove_selector){
+          options.remove_element = this.find(options.remove_selector);  
+        }
+
         }
         
         return this;
@@ -231,7 +240,9 @@ return'"'+string+'"';};})(jQuery);
         offset: 0,
         opacity: 0.8,
         title: 'title',
-        trigger: 'hover'
+        trigger: 'hover',
+        remove_selector: false,
+        remove_element: false
     };
     
     // Overwrite this method to provide options on a per-element basis.

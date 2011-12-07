@@ -71,7 +71,7 @@ Field.prototype.bind_table_events = function(){
   });
 
   //init tooltips
-  $('span.placeholder-tag-green, span.placeholder-tag-yellow').tipsy({fade: true, gravity: 's', live: true, delayIn: 300, delayOut: 300, html: true});	
+  $('span.placeholder-tag-green, span.placeholder-tag-yellow').tipsy({remove_selector: '.remove-tag' , fade: true, gravity: 's', live: true, delayIn: 300, delayOut: 300, html: true});	
 
 	//add placeholder buttons
 	self.$table.find('a.button').bind('click',function(){
