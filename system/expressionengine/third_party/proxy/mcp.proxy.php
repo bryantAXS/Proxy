@@ -67,7 +67,7 @@ class Proxy_mcp
 	public function _dump($data)
 	{
 		  echo "<pre>"; 
-      print_r($dump); 
+      print_r($data); 
       echo "</pre>";
 	}
 		
@@ -90,6 +90,8 @@ class Proxy_mcp
 		$this->data['channels'] = $this->sql->get_all_channels_by_id();
 		$this->data['fields'] = $this->sql->get_all_fields_by_channel_id();
 		$this->data['fields_settings'] = $this->EE->field_settings->get_settings();
+
+		$this->_dump($this->data['fields_settings']);
 
 		$view_code = '';
 		return $this->EE->load->view('field_settings', $this->data, TRUE);

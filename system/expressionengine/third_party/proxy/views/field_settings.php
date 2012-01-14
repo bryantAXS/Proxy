@@ -85,7 +85,6 @@
 
 				$field_data = $fields[$channel_id][$field_id];
 				
-				
 				//creating new field object -- this will eventually be moved out of this view and into its own model
 				$field = new Field();
 				$field->channel_id = $channel_id;
