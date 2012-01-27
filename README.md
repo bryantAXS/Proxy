@@ -47,6 +47,8 @@ The Placeholders field should have:
 
 Click Add Placeholder.
 
+_Note: You need to have at least once entry for the channel you are performing substitution on for the data to be replaced_
+
 ##Template Tags
 
 There are no module specific template tags at this time.
